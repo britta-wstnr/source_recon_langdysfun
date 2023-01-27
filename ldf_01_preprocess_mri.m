@@ -14,16 +14,28 @@
 %% Set option
 
 % Two options in this script:
-bias_field_corr = 0;  % bias field correction of the MRI
+bias_field_corr = 1;  % bias field correction of the MRI
 reslicing = 1;  % reslicing the MRI
 
 %% Attention!
 
 % This pipeline assumes nifti files. If your MRI is in DICOM format, you
-% can convert it to nifti by reading it in with FieldTrip (like below) and
-% then writing it out again using ft_write_mri(filename, 'nifti').
+% can convert it to nifti by reading it in with FieldTrip and
+% then writing it out again using ft_write_mri() - see below for an example
+
+% IMPORTANT! SPM cannot deal with zipped nifti files - i.e., the ending
+% should be .nii and not .nii.gz
+
+% Example of converting to nifti:
+% mri_tmp = ft_read_mri(projpath.mri);
+% ft_write_mri('~/MEG/test_mri/001-T1.nii', mri_tmp, 'dataformat', 'nifti')
+
+% NOW MAKE SURE to go and update projpath.mri in ldf_00_setup.m and run
+% that again before continuing!
 
 %% Plot the MRI 
+
+% This will also make sure the file actually exists :)
 
 mri = ft_read_mri(projpath.mri);
 ft_sourceplot([], mri);
@@ -48,7 +60,7 @@ if bias_field_corr
     % set the configurations
     % some of these configuration values are taken over from 
     % https://layerfmri.com/2017/12/21/bias-field-correction/
-    spm_config{1}.spm.spatial.preproc.channel.vols = [projpath.mri, ',1'];
+    spm_config{1}.spm.spatial.preproc.channel.vols = {[projpath.mri, ',1']};
     spm_config{1}.spm.spatial.preproc.channel.biasreg = 0.001;
     % a FWHM of 30 is the lightest option SPM supports. Change this to 40
     % if you still experience problems with segmentation:
