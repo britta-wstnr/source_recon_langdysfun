@@ -27,7 +27,11 @@ toolboxes.nifti = '~/Documents/toolboxes/NIfTI_20140122/';  % needed for reslici
 projpath = [];  % initialize
 
 % first, the path to the folder of the MRI, change this accordingly:
-projpath.base = '~/MEG/test_mri/';
+% SPM is particular about the way the path is set, so if you plan to use
+% SPM - e.g. the bias field correction step - make sure to not use the
+% tilde shortcut for doing so (i.e. '~/MEG/test_mri' below), but give the
+% full path here
+projpath.base = '/home/predatt/briwes/MEG/test_mri/';
 
 % second, the name of the MRI and a participant ID, also change:
 % This should be the path to a nifti file - if your data is DICOM or else,
