@@ -11,26 +11,39 @@
 % This script takes an MRI - possibly preprocessed with ldf_01_preprocess_mri.m
 % - and computes a 3-element BEM model for EEG or MEG data source reconstruction.
 
+%% Before we start we clear all and rerun our setup script
+
+clear all  %#ok
+ldf_00_setup
+
 %% First decide which MRI to use
 
 % change this path according to which MRI you want to use. Make sure you
 % have actually computed that MRI using ldf_01_preprocess_mri.m
 
 % options are:
-% projpath.mri = original MRI
-% projpath.mri_bfc = bias corrected MRI
 % projpath.mri_resl = resliced MRI
 % projpath.mri_bfc_resl = bias corrected and resliced MRI
 
-mri_path = projpath.mri_bfc_resl;
+mri_path = projpath.mri_resl;
 
-mri = ft_read_mri(mri_path);
-mri.coordsys = 'ras';  % if unsure: leave blank to get prompted
+% find and load the right MRI
+if strcmp(mri_path, projpath.mri)
+    warning('You should probably reslice and realign your MRI!')
+    mri = ft_read_mri(mri_path);
+elseif strcmp(mri_path, projpath.mri_resl)
+    load(projpath.mri_resl)
+    mri = mri_resl; clear mri_resl
+elseif strcmp(mri_path, projpath.mri_bfc_resl)
+    load(projpath.mri_resl)
+    mri = mri_resl; clear mri_resl
+else
+    error('Do not know how to load specified MRI');
+end
 
 %% Segment the MRI
 
-% Segment the MRI if projpath.seg does not exist yet, otherwise simply load
-% it from disk
+% Segment the MRI 
 % This takes time, so be prepared to wait some time. Go read a paper or
 % have a cup of tea :)
 % Remember to RECOMPUTE in case you change the input MRI, e.g. by
@@ -56,7 +69,7 @@ save(projpath.seg, 'seg');
 seg.transform = mri.transform;
 seg.anatomy   = mri.anatomy;
 
-% plot all three:
+% plot all three tissue types:
 tissue =  {'brain', 'skull', 'scalp'};
 for ii = 1:length(tissue)
 
@@ -65,7 +78,6 @@ for ii = 1:length(tissue)
     cfg.funparameter = tissue{ii};
     cfg.colorbar = 'no';  % no functional data
     ft_sourceplot(cfg, seg);
-
 end
 
 %% Prepare the mesh
