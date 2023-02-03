@@ -13,9 +13,8 @@
 
 %% Set option
 
-% Two options in this script:
-bias_field_corr = 1;  % bias field correction of the MRI
-reslicing = 1;  % reslicing the MRI
+% Optional bias field correction of the MRI
+bias_field_corr = 0;   
 
 %% Attention!
 
@@ -26,19 +25,24 @@ reslicing = 1;  % reslicing the MRI
 % IMPORTANT! SPM cannot deal with zipped nifti files - i.e., the ending
 % should be .nii and not .nii.gz
 
+% IMPORTANT! Do not use any other programs for converting to nifti, unless
+% you are very sure they give you good output - some programs might by
+% default strip the skull or do other processing which will pose problems
+% for this pipeline.
+
 % Example of converting to nifti:
 % mri_tmp = ft_read_mri(projpath.mri);
 % ft_write_mri('~/MEG/test_mri/001-T1.nii', mri_tmp, 'dataformat', 'nifti')
 
-% NOW MAKE SURE to go and update projpath.mri in ldf_00_setup.m and run
-% that again before continuing!
+% NOW MAKE SURE to go and update projpath.mri to point to the new nifti 
+% in ldf_00_setup.m and run ldf_00_setup.m again before continuing!
 
 %% Plot the MRI 
 
 % This will also make sure the file actually exists :)
 
-mri = ft_read_mri(projpath.mri);
-ft_sourceplot([], mri);
+mri_in = ft_read_mri(projpath.mri);
+ft_sourceplot([], mri_in);
 
 %% Bias field correction
 
@@ -80,28 +84,35 @@ if bias_field_corr
     spm_jobman('initcfg');
     spm_jobman('run', spm_config);
 
+    % if we do this, we have to reload the bias-field-corrected MRI now
+    % since we want to continue with this.
+    mri_in = ft_read_mri(projpath.mri_bfc);
+    ft_sourceplot([], mri_in);  % check that it looks decent
+
 end
+
+%% We have to re-align the MRI for successful segmentation
+
+% NOTE: this is NOT the coregistration process. We just coarsely realign
+% the MRI so that the segmentation algo has a higher chance of performing well. 
+% Run the below code and follow the prompts in the command window.
+% You do not have to be overly concerned with precision here, as we only
+% want to change the axes and orientation of the MRI, but we do NOT YET
+% choose the landmarks for coregistation with the EEG (or MEG) coordinate
+% system.
+
+cfg = [];
+cfg.method   = 'interactive';
+cfg.coordsys = 'ctf';
+mri = ft_volumerealign(cfg, mri_in);
 
 %% reslice MRI
 
 % Reslicing an MRI makes sure that the voxels are isotropic - i.e., the
 % edges of the voxels have the same length in all directions.
 
-if reslicing
+% This also saves the MRI, which is crucial for further processing.
+mri_resl = ft_volumereslice([], mri);
+save(projpath.mri_resl, 'mri_resl'); 
 
-    addpath(toolboxes.nifti)
 
-    if bias_field_corr
-        % use bias field corrected MRI
-        mri_in = projpath.mri_bfc;
-        mri_out = projpath.mri_bfc_resl
-    else
-        % use original MRI
-        mri_in = projpath.mri;
-        mri_out = projpath.mri_resl;
-    end
-
-    % reslice the MRI and save
-    reslice_nii(mri_in, mri_out);
-
-end
