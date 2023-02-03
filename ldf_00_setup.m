@@ -50,8 +50,8 @@ projpath.mri = fullfile(projpath.base, mri_name);  % full path to MRI
 % relies on how SPM saves the data
 projpath.mri_bfc = fullfile(projpath.base, ['m', mri_name]);  
 mri_stem = split(mri_name, '.');
-projpath.mri_resl = fullfile(projpath.base, [mri_stem{1}, '_resl.', mri_stem{2}]);  
-projpath.mri_bfc_resl = fullfile(projpath.base, ['m', mri_stem{1}, '_resl.', mri_stem{2}]);  
+projpath.mri_resl = fullfile(projpath.base, [mri_stem{1}, '_resl.mat']);  
+projpath.mri_bfc_resl = fullfile(projpath.base, ['m', mri_stem{1}, '_resl.mat']);  
 
 % Now we generate some filenames we can use for saving and reusing
 % generated output.
