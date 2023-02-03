@@ -25,6 +25,9 @@ ldf_00_setup
 % projpath.mri_resl = resliced MRI
 % projpath.mri_bfc_resl = bias corrected and resliced MRI
 
+% I recommend to always realign and reslice your MRI (as per
+% ldf_01_preprocess_mri.m
+
 mri_path = projpath.mri_resl;
 
 % find and load the right MRI
