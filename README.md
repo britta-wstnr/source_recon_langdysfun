@@ -12,5 +12,3 @@ The scripts are numbered - start with the first one `ldf_00_setup.m` and work yo
 [FieldTrip](https://www.fieldtriptoolbox.org/download/)
 
 [SPM12](https://www.fil.ion.ucl.ac.uk/spm/software/download/)
-
-[Nifti Toolbox](https://se.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image)

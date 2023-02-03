@@ -20,7 +20,6 @@
 
 toolboxes.fieldtrip = '~/Documents/code_dev/fieldtrip';
 toolboxes.spm12 = '~/Documents/code_dev/spm12';  % needed for bias field corr.
-toolboxes.nifti = '~/Documents/toolboxes/NIfTI_20140122/';  % needed for reslicing
 
 %% Paths for data 
 
@@ -102,6 +101,3 @@ fprintf('You are using Fieldtrip on path %s, branch %s, version hash %s \n', ...
 % SPM version 12 can be obtained here:
 % https://www.fil.ion.ucl.ac.uk/spm/software/download/
 % make sure to choose version 12!
-
-% reslice_nii as part of Nifti:
-% https://se.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image
