@@ -58,9 +58,10 @@ projpath.mri_bfc_resl = fullfile(projpath.base, ['m', mri_stem{1}, '_resl.mat'])
 % into the same folder. That should be fine for this demo, but maybe not be
 % the smartest choice when you do extensive data analysis.
 projpath.seg = fullfile(projpath.base, sprintf('%s_seg.mat', id));
-projpath.vol = fullfile(projpath.base, sprintf('%s_vol.at', id));
-projpath.grid = fullfile(projpath.base, sprintf('%s_grid.at', id));
+projpath.vol = fullfile(projpath.base, sprintf('%s_vol.mat', id));
+projpath.grid = fullfile(projpath.base, sprintf('%s_grid.mat', id));
 projpath.fwd = fullfile(projpath.base, sprintf('%s_fwd.mat', id));
+projpath.fids = fullfile(projpath.base, sprintf('%s_fids.mat', id));
 
 
 %% Add FieldTrip to path
