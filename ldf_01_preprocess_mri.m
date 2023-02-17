@@ -91,21 +91,6 @@ if bias_field_corr
 
 end
 
-%% We have to re-align the MRI for successful segmentation
-
-% NOTE: this is NOT the coregistration process. We just coarsely realign
-% the MRI so that the segmentation algo has a higher chance of performing well. 
-% Run the below code and follow the prompts in the command window.
-% You do not have to be overly concerned with precision here, as we only
-% want to change the axes and orientation of the MRI, but we do NOT YET
-% choose the landmarks for coregistation with the EEG (or MEG) coordinate
-% system.
-
-cfg = [];
-cfg.method   = 'interactive';
-cfg.coordsys = 'ctf';
-mri = ft_volumerealign(cfg, mri_in);
-
 %% reslice MRI
 
 % Reslicing an MRI makes sure that the voxels are isotropic - i.e., the
