@@ -47,7 +47,7 @@ save(projpath.seg, 'seg');
 
 % add anatomical information to the segmentation
 seg.transform = mri_aligned.transform;
-seg.anatomy   = mri_algined.anatomy;
+seg.anatomy   = mri_aligned.anatomy;
 
 % plot all three tissue types:
 tissue =  {'brain', 'skull', 'scalp'};
@@ -113,6 +113,8 @@ hold on; pause
 ft_plot_mesh(mesh(2), 'facealpha', 0.25, 'facecolor', 'blue');
 hold on; pause          
 ft_plot_mesh(mesh(3), 'facealpha', 0.25, 'edgecolor', [0.8, 0.8, 0.8]);
+
+view([0 90 0])
 
 %% Make the volume conductor model
 
