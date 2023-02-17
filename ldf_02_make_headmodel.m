@@ -13,36 +13,13 @@
 
 %% Before we start we clear all and rerun our setup script
 
-clear all  %#ok
+clear all  %# ok
 ldf_00_setup
 
-%% First decide which MRI to use
+%% Load MRI
 
-% change this path according to which MRI you want to use. Make sure you
-% have actually computed that MRI using ldf_01_preprocess_mri.m
-
-% options are:
-% projpath.mri_resl = resliced MRI
-% projpath.mri_bfc_resl = bias corrected and resliced MRI
-
-% I recommend to always realign and reslice your MRI (as per
-% ldf_01_preprocess_mri.m
-
-mri_path = projpath.mri_resl;
-
-% find and load the right MRI
-if strcmp(mri_path, projpath.mri)
-    warning('You should probably reslice and realign your MRI!')
-    mri = ft_read_mri(mri_path);
-elseif strcmp(mri_path, projpath.mri_resl)
-    load(projpath.mri_resl)
-    mri = mri_resl; clear mri_resl
-elseif strcmp(mri_path, projpath.mri_bfc_resl)
-    load(projpath.mri_resl)
-    mri = mri_resl; clear mri_resl
-else
-    error('Do not know how to load specified MRI');
-end
+% First we load the MRI that was aligned to CTF space:
+load(projpath.mri_aligned);
 
 %% Segment the MRI
 
@@ -62,15 +39,15 @@ cfg = [];
 cfg.spmversion = 'spm12';
 cfg.spmmethod = 'old';
 cfg.output = {'brain', 'skull', 'scalp'};
-seg = ft_volumesegment(cfg, mri);
+seg = ft_volumesegment(cfg, mri_aligned);
 
 save(projpath.seg, 'seg');
 
 %% Check segmentation by plotting
 
 % add anatomical information to the segmentation
-seg.transform = mri.transform;
-seg.anatomy   = mri.anatomy;
+seg.transform = mri_aligned.transform;
+seg.anatomy   = mri_algined.anatomy;
 
 % plot all three tissue types:
 tissue =  {'brain', 'skull', 'scalp'};
@@ -139,29 +116,43 @@ ft_plot_mesh(mesh(3), 'facealpha', 0.25, 'edgecolor', [0.8, 0.8, 0.8]);
 
 %% Make the volume conductor model
 
-% This takes time! -- as in hours!
+% This takes time! -- as in: hours!
 
 cfg = [];
 cfg.method = 'dipoli';  % dipoli, bemcp, or openmeeg (the latter needs installation)
 cfg.conductivity = [0.33 0.0041 0.33];
 vol = ft_prepare_headmodel(cfg, mesh);
 
+save(projpath.vol, 'vol', '-v7.3');
+
+%% We can double check again if that aligns well with our MRI
+
+cfg = [];
+cfg.intersectmesh = vol.bnd;
+ft_sourceplot(cfg, mri_aligned);
+
 %% Create warped MNI grid
 
 % Let's do the grid warp again ....
 
-% This is what you would do if you run a group study. This code takes an
+% This is what you do if you run a group study. This code takes an
 % MNI grid that is shipped with FieldTrip, and warps the positions of this
 % template grid to the MRI we supply. That way, we do the source
 % reconstruction in individual space (since we warp the grid to the indiv.
 % MRI) but they all represent the same coordinates in the MNI brain - which
 % makes the positions all comparable to each other in a group analysis.
+% One thing you have to keep in mind with this approach is that we cannot
+% plot the data on the individual MRI anymore. The data is represented in
+% that coordinate space - but the source points do not span a regular grid
+% here (since it is warped ...) - and our plotting functions only support
+% regular spacing. But: we can just plot on a template brain instead! More
+% on that in the plotting file after source reconstruction!
 
 template_grid = load(fullfile(toolboxes.fieldtrip, ...
     '/template/sourcemodel/standard_sourcemodel3d10mm.mat'));
 
 cfg = [];
-cfg.mri = mri;
+cfg.mri = mri_aligned;
 cfg.grid.template = template_grid.sourcemodel;
 cfg.warpmni = 'yes';  % this is unlocking the warping step
 cfg.nonlinear = 'yes';  % we warp non-linearly
