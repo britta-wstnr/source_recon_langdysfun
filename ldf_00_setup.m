@@ -21,6 +21,9 @@
 toolboxes.fieldtrip = '~/Documents/code_dev/fieldtrip';
 toolboxes.spm12 = '~/Documents/code_dev/spm12';  % needed for bias field corr.
 
+% also add the path to the subfolder "functions" of this script folder:
+addpath('./function')
+
 %% Paths for data 
 
 projpath = [];  % initialize
@@ -37,6 +40,14 @@ projpath.base = '/home/predatt/briwes/MEG/test_mri/';
 % check ldf_01_preprocess_mri.m for some info on how to convert.
 mri_name = '002_T1w.nii';
 id = '002';
+
+% add here the path to your electrodes file - the one you get out of
+% identifying the electrodes in the structural scan. You can also follow
+% the script ldf_05_identify_electrodes.m to get this file, then you can
+% leave the below as is.
+projpath.elec = fullfile(projpath.base, [id, '_elec.mat']);
+
+%% Augment paths
 
 % The rest of this section is automatic - no need to change further paths.
 % But make sure to read the comments to know what's gonna happen and where
@@ -62,6 +73,7 @@ projpath.vol = fullfile(projpath.base, sprintf('%s_vol.mat', id));
 projpath.grid = fullfile(projpath.base, sprintf('%s_grid.mat', id));
 projpath.fwd = fullfile(projpath.base, sprintf('%s_fwd.mat', id));
 projpath.fids = fullfile(projpath.base, sprintf('%s_fids.mat', id));
+projpath.mri_aligned = fullfile(projpath.base, sprintf('%s_mri_aligned', id));
 
 
 %% Add FieldTrip to path
