@@ -21,8 +21,10 @@
 toolboxes.fieldtrip = '~/Documents/code_dev/fieldtrip';
 toolboxes.spm12 = '~/Documents/code_dev/spm12';  % needed for bias field corr.
 
-% also add the path to the subfolder "functions" of this script folder:
-addpath('./function')
+% also add the path to the subfolder "functions" of this script folder.
+% This assumes you are in the foler with the scripts - otherwise just add
+% the full path to the subfolder below!
+addpath('./functions')
 
 %% Paths for data 
 
