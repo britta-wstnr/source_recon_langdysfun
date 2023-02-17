@@ -10,40 +10,37 @@
 
 % This script deals with coregistration and the actual forward modelling.
 
-%% Attention!
+%% Load files
 
-% This script is still a construction site. I will first have to obtain
-% some EEG data from the DCC to finalize this script. The below is just an
-% outline of functions, but not tested.
+% For the leadfield computation, we need to load the following:
+% the electrode information, elec
+% the headmodel, vol
+% the source grid, grid
+% This information will all be combined to compute the forward model, using
+% the funciton ft_prepare_leadfield
 
-%% Coregistration
+% read in the headmodel
+load(projpath.vol)
 
-% This assumes coregistration with Nutmeg. For coregistration with
-% FieldTrip, I'll have to check the resulting data structures and update
-% this section
+% read in the electrodes file
+load(projpath.elec);  % loaded structure is here called "elec"
 
-% load coregistration and headmodel
-load(path_to_coreg);  % nutmeg structure
+% load the source grid
+load(projpath.grid)
 
-% read in the data
-load(path_to_data);
+%%  Sanity check: plot all together (NEVER SKIP THIS STEP!!!)
 
-elec_eeg = data_raw.elec;
-elec_mri = coregister_data(elec_eeg, nuts, 'ctf');  % coreg to MRI space
-
-% The function coregister_data() is a function that is shared in this
-% folder
-
-%% Sanity check: plot all together (NEVER SKIP THIS STEP!!!)
+% Before we continue, we want to make sure that all our forward model
+% "ingredients" are in the same coordinate space and well aligned.
+% Thus, we plot them together:
 
 figure;
 hold all;
-ft_plot_headmodel(vol, 'edgecolor', 'none', 'facecolor', 'cortex');
-ft_plot_sens(elec_mri, 'coilshape', 'point', 'style', 'r.');
+ft_plot_headmodel(vol, 'edgecolor', 'none', 'facecolor', 'cortex')
+alpha 0.5
+ft_plot_sens(elec, 'coilshape', 'point', 'style', 'r.');
 ft_plot_mesh(grid.pos(grid.inside,:));
-view([90 0 0])
-title(s_name)
-set(gca, 'FontSize', 18)
+view([0 90 0])
 set(gcf, 'color', [1 1 1])
 
 %% Prepare leadfield
@@ -58,5 +55,3 @@ cfg.channel = 'EEG';
 cfg.reducerank = 'no';
 cfg.normalize = 'no';
 leadfield = ft_prepare_leadfield(cfg);
-
-
