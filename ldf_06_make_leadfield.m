@@ -45,12 +45,19 @@ set(gcf, 'color', [1 1 1])
 
 %% Prepare leadfield
 
-% Finally, we can compute the forward model
+% Finally, we can compute the forward model:
+% we supply the source grid, the headmodel (vol) and the electrode
+% information (elec).
+% We tell the algorithm to not reduce rank (this is EEG data, so we are
+% able to see radial and tangential sources, thus we use the full rank of
+% the leadfield) and to not normalized the leadfield (if we do want to get
+% rid of the center-of-head bias, we prefer to normalize the weights of the
+% beamformer - checkout Westner et al. 2022 for more info).s
 
 cfg = [];
 cfg.sourcemodel = grid;
 cfg.headmodel = vol;
-cfg.grad = elec_mri;
+cfg.grad = elec;
 cfg.channel = 'EEG';
 cfg.reducerank = 'no';
 cfg.normalize = 'no';
