@@ -1,4 +1,4 @@
-%% Source reconstruction
+%% Source estimation
 
 % Segment MRI, make headmodel, make leadfield
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
