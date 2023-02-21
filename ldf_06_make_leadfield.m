@@ -8,7 +8,7 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% This script deals with coregistration and the actual forward modelling.
+% This script checks the coregistration and computes the forward model.
 
 %% Load files
 
@@ -52,7 +52,9 @@ set(gcf, 'color', [1 1 1])
 % able to see radial and tangential sources, thus we use the full rank of
 % the leadfield) and to not normalized the leadfield (if we do want to get
 % rid of the center-of-head bias, we prefer to normalize the weights of the
-% beamformer - checkout Westner et al. 2022 for more info).s
+% beamformer 
+% - checkout Westner et al. 2022. DOI: 10.1016/j.neuroimage.2021.118789 
+% for more info).
 
 cfg = [];
 cfg.sourcemodel = grid;
@@ -62,3 +64,5 @@ cfg.channel = 'EEG';
 cfg.reducerank = 'no';
 cfg.normalize = 'no';
 leadfield = ft_prepare_leadfield(cfg);
+
+save(projpath.fwd, 'leadfield')
