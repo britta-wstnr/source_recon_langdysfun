@@ -15,9 +15,6 @@ if ~strcmp(system, 'acticap_dcc')
 else
     elec_order = {
         'Ref'  % TP9, behind left ear
-        'lpa'
-        'nas'
-        'rpa'
         'Gnd'  % 5
         'Fz'
         'FCz'
