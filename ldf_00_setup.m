@@ -20,6 +20,7 @@
 
 toolboxes.fieldtrip = '~/Documents/code_dev/fieldtrip';
 toolboxes.spm12 = '~/Documents/code_dev/spm12';  % needed for bias field corr.
+toolboxes.nutmeg = '~/Documents/code_dev/nutmeg';  % needed for coreg
 
 % also add the path to the subfolder "functions" of this script folder.
 % This assumes you are in the foler with the scripts - otherwise just add
@@ -76,7 +77,8 @@ projpath.grid = fullfile(projpath.base, sprintf('%s_grid.mat', id));
 projpath.fwd = fullfile(projpath.base, sprintf('%s_fwd.mat', id));
 projpath.fids = fullfile(projpath.base, sprintf('%s_fids.mat', id));
 projpath.mri_aligned = fullfile(projpath.base, sprintf('%s_mri_aligned', id));
-
+projpath.mesh = fullfile(projpath.base, sprintf('%s_mesh', id));
+projpath.elec_aligned = fullfile(projpath.base, sprintf('%s_elec_aligned', id));
 
 %% Add FieldTrip to path
 
@@ -116,3 +118,7 @@ fprintf('You are using Fieldtrip on path %s, branch %s, version hash %s \n', ...
 % SPM version 12 can be obtained here:
 % https://www.fil.ion.ucl.ac.uk/spm/software/download/
 % make sure to choose version 12!
+
+% NutMEG
+% Nutmeg can be downloaded from GitHub here:
+% https://github.com/UCSFBiomagneticImagingLab/nutmeg
