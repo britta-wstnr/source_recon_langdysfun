@@ -1,7 +1,7 @@
-%% Identifying fiducials on MRI
+%% Align MRI to CTF space
 
-% Identify the fiducials on the MRI for coregistration
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Align MRI roughly to CTF space for successful segmentation
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % AUTHOR: Britta U. Westner <britta.wstnr[at]gmail.com>
 % LICENCE: GNU General Public License v3.0
@@ -12,7 +12,8 @@
 
 % It is important that you now choose the preprocessed MRI that you want to use
 % for creating your head model (i.e. the resliced and potentially bias 
-% corrected one). % Otherwise, there will be a mismatch between the coordinate 
+% corrected one). 
+% Otherwise, there will be a mismatch between the coordinate 
 % systems and your electrode positions will not align with the head model.
 
 % For the following pipeline to be successful, reslicing your MRI is highly
@@ -35,7 +36,7 @@ else
     error('Do not know how to load specified MRI');
 end
 
-%% Identify the fiducials on the MRI
+%% Identify the fiducials on the MRI - NOT COREGISTRATION STEP!!!
 
 % Now we want to identify the fiducial points on the MRI. These points
 % we'll use to align the MRI and the EEG electrodes. So be careful here -
@@ -44,6 +45,10 @@ end
 
 % Follow the instructions that get printed to the command window and mark:
 % Nasion, LPA, RPA, and a z-point.
+% You do not have to be *overly* precise here - this is NOT THE
+% COREGISTRATION!
+% We just bring the MRI into CTF space which will help us with segmentation
+% as well as with using the structural scan for the coregistration step.
 
 cfg = [];
 cfg.method   = 'interactive';
