@@ -25,6 +25,9 @@ load(projpath.fwd)
 % we also need to supply the headmodel again:
 load(projpath.vol)
 
+% load aligned electrodes
+load(projpath.elec_aligned)
+
 %% Load the data
 
 % It is assumed the data is cleaned and epoched around stimulus onset - or
@@ -92,7 +95,7 @@ cfg = [];
 cfg.method = 'lcmv';
 cfg.headmodel = vol;  % headmodel
 cfg.sourcemodel = leadfield;  % forward model
-cfg.elec = elec;  % electrode information
+cfg.elec = elec_aligned;  % electrode information
 cfg.lcmv.weightnorm = 'unitnoisegain';
 cfg.lcmv.fixedori = 'yes';
 cfg.lcmv.kappa = cov_rank;
