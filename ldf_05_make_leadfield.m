@@ -22,8 +22,8 @@
 % read in the headmodel
 load(projpath.vol)
 
-% read in the electrodes file
-load(projpath.elec);  % loaded structure is here called "elec"
+% read in the aligned electrodes file
+load(projpath.elec_aligned);
 
 % load the source grid
 load(projpath.grid)
@@ -38,7 +38,7 @@ figure;
 hold all;
 ft_plot_headmodel(vol, 'edgecolor', 'none', 'facecolor', 'cortex')
 alpha 0.5
-ft_plot_sens(elec, 'coilshape', 'point', 'style', 'r.');
+ft_plot_sens(elec_aligned, 'coilshape', 'point', 'style', 'r.');
 ft_plot_mesh(grid.pos(grid.inside,:));
 view([0 90 0])
 set(gcf, 'color', [1 1 1])
@@ -59,7 +59,7 @@ set(gcf, 'color', [1 1 1])
 cfg = [];
 cfg.sourcemodel = grid;
 cfg.headmodel = vol;
-cfg.grad = elec;
+cfg.elec = elec_aligned;
 cfg.channel = 'EEG';
 cfg.reducerank = 'no';
 cfg.normalize = 'no';
