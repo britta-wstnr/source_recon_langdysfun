@@ -6,6 +6,7 @@ They are meant to be verbose with respect to comments in the scripts, but are no
 
 ## A note on coregistration
 These scripts feature _automatic_ coregistration using a ["3D structural scan"](https://www.fieldtriptoolbox.org/tutorial/electrode/) from the EEG lab (by matching the head surface from the structural scan to the head surface of the MRI). If your data does not have such structural scans you can hop to the branch `traditional_coreg`  of this repository, which features fiducial-based coregistration instead.
+_CREDIT_: Thanks to Sarang S. Dalal for giving me an excellent starting point to work on this matching coregistration by sharing his code with me (detailed credit in respective function headers). 
 
 ## How to use this
 
