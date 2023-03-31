@@ -116,6 +116,13 @@ ft_plot_mesh(mesh(3), 'facealpha', 0.25, 'edgecolor', [0.8, 0.8, 0.8]);
 
 view([0 90 0])
 
+%% Save mesh
+
+% If this all looks good, we save the mesh - we need it again for the
+% coregistration step
+
+save(projpath.mesh, 'mesh', '-v7.3');
+
 %% Make the volume conductor model
 
 % This takes time! -- as in: hours!
