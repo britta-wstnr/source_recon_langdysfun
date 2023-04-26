@@ -1,6 +1,6 @@
-%% Align MRI to CTF space
+%% Align MRI to defined space
 
-% Align MRI roughly to CTF space for successful segmentation
+% Align MRI roughly to BTI space for successful segmentation
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % AUTHOR: Britta U. Westner <britta.wstnr[at]gmail.com>
@@ -52,7 +52,7 @@ end
 
 cfg = [];
 cfg.method   = 'interactive';
-cfg.coordsys = 'ctf';
+cfg.coordsys = 'bti';
 mri_aligned = ft_volumerealign(cfg, mri);
 
 %% Save output
