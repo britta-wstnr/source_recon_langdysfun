@@ -69,7 +69,7 @@ view([90, 0]);
 lightangle(-125, -50);
 title('MRI');
 
-suptitle('These are the 3D data used for ICP');
+sgtitle('These are the 3D data used for ICP');
 
 %% Reduce coreg error via ICP of facial points
 

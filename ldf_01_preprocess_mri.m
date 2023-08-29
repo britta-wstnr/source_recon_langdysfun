@@ -97,7 +97,7 @@ end
 % edges of the voxels have the same length in all directions.
 
 % This also saves the MRI, which is crucial for further processing.
-mri_resl = ft_volumereslice([], mri);
+mri_resl = ft_volumereslice([], mri_in);
 save(projpath.mri_resl, 'mri_resl'); 
 
 
