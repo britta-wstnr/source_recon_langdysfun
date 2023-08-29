@@ -122,9 +122,23 @@ axis equal
 lightangle(240,45);
 lightangle(-240,45);
 
-%% Apply the coregistration to the electrodes
+%% Check that the electrodes are aligned with our structural scan
+
+% If the electrodes do not match the structural scan, something went wrong
+% when identifying the electrodes in step 4.
+% Note for lab: if you identified electrodes using the old routine, you
+% will unfortunately have to do this step again since this routine needs to use
+% a different coordinate system in that step.
 
 load(projpath.elec);
+
+figure;
+ft_plot_mesh(scan_mesh);
+hold on
+ft_plot_sens(elec)
+
+
+%% Apply the coregistration to the electrodes
 
 if ~strcmp(elec.unit, 'mm')
     elec = ft_convert_units(elec, 'mm');
@@ -137,9 +151,16 @@ elec_aligned.chanpos = nut_coordtfm(elec.chanpos, tfm);
 %% Visualize the electrodes together with the MRI
 
 figure;
-ft_plot_mesh(mesh(3));
+ft_plot_mesh(mri_mesh);
 hold on
 ft_plot_sens(elec_aligned)
+
+%% Project the electrodes to the skin surface
+
+cfg = [];
+cfg.method = 'project';
+cfg.headshape = mesh(3);
+elec_aligned = ft_electroderealign(cfg, elec_aligned);
 
 %% Double check the labelling as well
 
