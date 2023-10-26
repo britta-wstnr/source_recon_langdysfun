@@ -19,7 +19,8 @@ ldf_00_setup
 %% Load MRI
 
 % First we load the MRI that was aligned to CTF space:
-load(projpath.mri_aligned);
+load(projpath.mri_resl);
+mri_resl.coordsys = 'spm';
 
 %% Segment the MRI
 
@@ -58,6 +59,98 @@ for ii = 1:length(tissue)
     cfg.funparameter = tissue{ii};
     cfg.colorbar = 'no';  % no functional data
     ft_sourceplot(cfg, seg);
+end
+
+%% Fix scalp segmentation
+
+% (ONLY!) If the segmentation plots or the mesh plots have holes, or if the
+% headmodelling step fails, circle back here and run the following code.
+% Then prepare the mesh again.
+
+if(0)  
+
+    %% Step 1 
+    % Use private FieldTrip function to attempt filling holes
+
+    seg_fill = seg;  %#ok % make a copy of seg
+    
+    % jump directory since the directory that contains the funciton is private 
+    % and thus cannot be added to path via addpath
+    pw_dir = pwd;
+    [~, ft_path] = ft_version;
+    cd(fullfile(ft_path, 'private'));
+    
+    % fill along z axis
+    seg_fill.scalp = volumefillholes(seg_fill.scalp, 3);
+    
+    % now we can jump back to previous directory:
+    cd(pw_dir);
+
+    %% Step 2
+    % Dilate scalp segmentation
+
+    seg_dil = seg_fill;  % work with filled segmentation
+
+    % dilation:
+    se_scalp = strel('cube', 3);
+    seg_dil.scalp = imdilate(seg_fill.scalp, se_scalp);
+
+    % NOTE: The segmentations might now be overlapping, creating overlapping 
+    % meshes in the end. This could be corrected by subtracting as below,
+    % but in practice this did not work amazingly. It seems in tests that
+    % the iso2mesh functions in "Downsample and repair the meshes" catch
+    % any problems that might arise from NOT subtracting. If problems
+    % appear at the headmodelling stage thought, it might be worth getting it
+    % back into the mix.
+    % seg_dil.scalp(seg_dil.skull) = 0;
+
+    %% Plot results
+
+    figure;
+    cfg = [];
+    cfg.method = 'ortho';
+    cfg.funparameter = 'scalp';
+    cfg.colorbar = 'no';  % no functional data
+    ft_sourceplot(cfg, seg);
+    sgtitle([id, ' before correction'])
+
+    figure;
+    cfg = [];
+    cfg.method = 'ortho';
+    cfg.funparameter = 'scalp';
+    cfg.colorbar = 'no';  
+    ft_sourceplot(cfg, seg_dil);
+    sgtitle([id, ' after dilating'])
+
+    %% Step 3
+    % Deislanding
+
+    % ONLY do this if the other two steps above are not fixing the problem.
+    % This step can introduce problems if the previous two steps suffice.
+    if(0)  
+
+        new_scalp = deislands3d(seg_dil.scalp);
+        seg_dil.scalp(new_scalp) = 1; % correct scalp using the deislanding
+
+        % only do below if you are sure, see above.
+        %     seg_dil.scalp(seg_dil.skull) = 0; % correct with skull
+    
+        figure;
+        cfg = [];
+        cfg.method = 'ortho';
+        cfg.funparameter = 'scalp';
+        cfg.colorbar = 'no';  % no functional data
+        ft_sourceplot(cfg, seg_dil);
+        sgtitle([sub, ' after deislanding'])
+    
+    end
+
+    %% Overwrite seg
+
+    % if you are happy with the output, overwrite seg and save
+    seg = seg_dil;
+    save(projpath.seg, 'seg');
+
 end
 
 %% Prepare the mesh
