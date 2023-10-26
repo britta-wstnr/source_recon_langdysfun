@@ -27,7 +27,7 @@ ax_scan.Interactions = dataTipInteraction;
 disableDefaultInteractivity(ax_scan);  % turn off irritating data tips
 axis equal
 view([-90, -25])  
-lightangle(-125, -50);
+lightangle(-180, 50);
 
 % plot MRI
 ax_mri = subplot(1,2,2);
@@ -41,7 +41,7 @@ ax_mri.Interactions = dataTipInteraction;
 disableDefaultInteractivity(ax_mri);
 axis equal
 view([90, 0]);
-lightangle(45,-50);
+lightangle(-120,-50);
 
 fid_prompts = {'Please select middle of left eye.', ...
     'Please select middle of right eye.', ...
