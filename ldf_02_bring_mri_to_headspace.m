@@ -16,11 +16,14 @@
 % Otherwise, there will be a mismatch between the coordinate 
 % systems and your electrode positions will not align with the head model.
 
-% For the following pipeline to be successful, reslicing your MRI is highly
-% recommended. Bias field correction should be chosen in case it is
+% For the following pipeline to be successful, reslicing your MRI is can be
+% highly recommended. Bias field correction should be chosen in case it is
 % necessary (i.e. if the segmentation failed).
 
-mri_path = projpath.mri_resl;
+% For many Donders MRIs, reslicing turns out to be detrimental to the
+% segmentation process. 
+
+mri_path = projpath.mri;
 
 % find and load the right MRI
 if strcmp(mri_path, projpath.mri)
