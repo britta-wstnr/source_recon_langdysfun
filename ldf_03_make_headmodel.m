@@ -19,8 +19,8 @@ ldf_00_setup
 %% Load MRI
 
 % First we load the MRI that was aligned to CTF space:
-load(projpath.mri_resl);
-mri_resl.coordsys = 'spm';
+load(projpath.mri_aligned);
+
 
 %% Segment the MRI
 
